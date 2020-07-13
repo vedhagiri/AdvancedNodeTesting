@@ -35,9 +35,9 @@ class CustomPage {
         return this.page.$eval(selector, el => el.innerHTML);
     }
 
-    async get(path) {
+    get(path) {
         
-       return await this.page.evaluate(
+       return this.page.evaluate(
             (_path) => {
                 return fetch(_path, {
                     method: 'GET',
@@ -51,21 +51,30 @@ class CustomPage {
 
     }
 
-    async post(path, body){
+    post(path, body){
 
-       return await this.page.evaluate(
-            (_p, _b) => {
-                return fetch(_p, {
+       return this.page.evaluate(
+            (_path, _body) => {
+                return fetch(_path, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(_b)
+                    body: JSON.stringify(_body)
                 }).then(res => res.json());
 
             }, path, body
         );
+    }
+    
+    execRequests(actions){
+        return Promise.all(
+            actions.map(({method, path, data}) => {
+                this[method](path, data);
+            })
+        );
+        
     }
 }
 
