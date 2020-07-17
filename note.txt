@@ -1,3 +1,5 @@
 // send request from browser commandline.
 
 fetch('/api/blogs', { method: 'POST', credientials: 'same-origin', headers: { 'Content-Type': 'application/json'}, body: JSON.stringify({ title: 'My Title', content: 'My Content'})});
+
+
